@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useReducer } from 'react'
 import type { Dispatch, ReactNode } from 'react'
 import type { GameState, Session } from '../types'
+import { checkWinner, isDraw, nextTurn } from '../utils/checkWinner'
 
 const STORAGE_KEY = 'tic-tac-toe-state'
 
@@ -63,6 +64,57 @@ function reducer(state: GameState, action: Action): GameState {
 
     case 'CLEAR_ALL':
       return { sessions: {}, activeSessionId: null }
+
+    case 'MAKE_MOVE': {
+      const id = state.activeSessionId
+      if (!id) return state
+      const session = state.sessions[id]
+      if (!session || session.status !== 'playing') return state
+
+      const { currentTurn, moves } = session
+      const taken = new Set([...moves.X, ...moves.O])
+      if (taken.has(action.cell)) return state
+
+      const nextMoves = {
+        ...moves,
+        [currentTurn]: [...moves[currentTurn], action.cell],
+      }
+
+      const won = checkWinner(nextMoves[currentTurn])
+      const drew = !won && isDraw(nextMoves.X, nextMoves.O)
+
+      const updated: Session = {
+        ...session,
+        moves: nextMoves,
+        currentTurn: won || drew ? currentTurn : nextTurn(currentTurn),
+        status: won ? 'won' : drew ? 'draw' : 'playing',
+        winner: won ? currentTurn : null,
+      }
+
+      return {
+        ...state,
+        sessions: { ...state.sessions, [id]: updated },
+      }
+    }
+
+    case 'RESET_SESSION': {
+      const id = state.activeSessionId
+      if (!id) return state
+      const session = state.sessions[id]
+      if (!session) return state
+      const reset: Session = {
+        ...session,
+        moves: { X: [], O: [] },
+        currentTurn: 'X',
+        status: 'playing',
+        winner: null,
+      }
+      return {
+        ...state,
+        sessions: { ...state.sessions, [id]: reset },
+      }
+    }
+
     default:
       return state
   }

@@ -30,7 +30,7 @@ function Board() {
         return (
           <button
             key={i}
-            className="cell"
+            className={`cell ${mark ? `cell-${mark.toLowerCase()}` : ''}`}
             role="gridcell"
             onClick={() => dispatch({ type: 'MAKE_MOVE', cell: i })}
             disabled={mark !== '' || status !== 'playing'}

@@ -1,4 +1,5 @@
 import { useGame } from '../context/GameContext'
+import './Sidebar.css'
 
 function Sidebar() {
   const { state, dispatch } = useGame()
@@ -7,26 +8,33 @@ function Sidebar() {
   )
 
   return (
-    <aside>
-      <h3>Games</h3>
+    <aside className="sidebar">
+      <h3 className="sidebar-title">Games</h3>
       {sessions.length === 0 ? (
-        <p>No games yet</p>
+        <p className="sidebar-empty">No games yet</p>
       ) : (
         <>
-          <ul>
-            {sessions.map(s => (
-              <li key={s.id}>
-                <button
-                  onClick={() =>
-                    dispatch({ type: 'SWITCH_SESSION', id: s.id })
-                  }
-                >
-                  {s.name} {s.id === state.activeSessionId ? '(active)' : ''}
-                </button>
-              </li>
-            ))}
+          <ul className="sidebar-list">
+            {sessions.map(s => {
+              const isActive = s.id === state.activeSessionId
+              return (
+                <li key={s.id}>
+                  <button
+                    className={`sidebar-item ${isActive ? 'is-active' : ''}`}
+                    onClick={() =>
+                      dispatch({ type: 'SWITCH_SESSION', id: s.id })
+                    }
+                  >
+                    {s.name}
+                  </button>
+                </li>
+              )
+            })}
           </ul>
-          <button onClick={() => dispatch({ type: 'CLEAR_ALL' })}>
+          <button
+            className="sidebar-clear"
+            onClick={() => dispatch({ type: 'CLEAR_ALL' })}
+          >
             Clear All
           </button>
         </>
