@@ -10,6 +10,20 @@ type Action =
   | { type: 'MAKE_MOVE'; cell: number }
   | { type: 'RESET_SESSION' }
   | { type: 'DELETE_SESSION'; id: string }
+  | { type: 'CLEAR_ALL' }
+
+function createSession(): Session {
+  const id = crypto.randomUUID()
+  return {
+    id,
+    name: `Game ${new Date().toLocaleTimeString()}`,
+    moves: { X: [], O: [] },
+    currentTurn: 'X',
+    status: 'playing',
+    winner: null,
+    createdAt: Date.now(),
+  }
+}
 
 const initialState: GameState = {
   sessions: {},
@@ -28,6 +42,27 @@ function init(): GameState {
 
 function reducer(state: GameState, action: Action): GameState {
   switch (action.type) {
+    case 'CREATE_SESSION': {
+      const session = createSession()
+      return {
+        ...state,
+        sessions: { ...state.sessions, [session.id]: session },
+        activeSessionId: session.id,
+      }
+    }
+
+    case 'SWITCH_SESSION':
+      return { ...state, activeSessionId: action.id }
+
+    case 'DELETE_SESSION': {
+      const { [action.id]: _removed, ...rest } = state.sessions
+      const activeSessionId =
+        state.activeSessionId === action.id ? null : state.activeSessionId
+      return { ...state, sessions: rest, activeSessionId }
+    }
+
+    case 'CLEAR_ALL':
+      return { sessions: {}, activeSessionId: null }
     default:
       return state
   }
