@@ -1,73 +1,79 @@
-# React + TypeScript + Vite
+# Tic-Tac-Toe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A multi-session Tic-Tac-Toe app built with React + TypeScript + Vite. Each game session maintains its own state, and progress persists across page reloads via `localStorage`.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Standard 3×3 board with X/O alternating turns
+- Winner and draw detection with a result popup
+- Multiple concurrent game sessions, switchable from the sidebar
+- Per-session state (board, turn, winner) preserved independently
+- Automatic persistence to `localStorage` — refresh the page and resume any game
+- Reset, delete, and clear-all controls
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 19** with TypeScript
+- **Vite** for dev server and build
+- **React Context + `useReducer`** for global state
+- **CSS** (per-component stylesheets, no UI library)
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
+- Node.js 20+ and npm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Install dependencies
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Run the dev server
+```bash
+npm run dev
 ```
+Open http://localhost:5173 in your browser.
+
+### Build for production
+```bash
+npm run build
+```
+Output goes to `dist/`.
+
+### Preview the production build locally
+```bash
+npm run preview
+```
+
+### Lint
+```bash
+npm run lint
+```
+
+## Run with Docker
+
+A multi-stage `Dockerfile` builds the app with Node and serves the static output via nginx (~50 MB final image).
+
+### Prerequisites
+- Docker (Desktop or Engine)
+
+### Build the image
+```bash
+docker build -t tic-tac-toe-frontend:latest .
+```
+
+### Run the container
+```bash
+docker run --rm -p 8080:80 tic-tac-toe-frontend:latest
+```
+Open http://localhost:8080 in your browser. Stop with `Ctrl+C`.
+
+To run detached:
+```bash
+docker run -d --name tic-tac-toe -p 8080:80 tic-tac-toe-frontend:latest
+docker stop tic-tac-toe && docker rm tic-tac-toe
+```
+
+## AI Assistance
+
+I used Claude (via Claude Code) to help with planning and debugging during development.
