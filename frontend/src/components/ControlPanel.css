@@ -1,0 +1,50 @@
+.control-panel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #e5e4e7;
+  border-radius: 6px;
+}
+
+.cp-turn {
+  font-size: 14px;
+  color: #666;
+  padding: 0 8px;
+  border-left: 1px solid #e5e4e7;
+  border-right: 1px solid #e5e4e7;
+}
+
+.cp-button {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cp-button:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+.cp-primary {
+  background: #aa3bff;
+  border-color: #aa3bff;
+  color: #fff;
+}
+
+.cp-primary:hover {
+  background: #8e2cd9;
+  border-color: #8e2cd9;
+}
+
+.cp-danger:hover {
+  background: #fee;
+  border-color: #f99;
+  color: #c33;
+}

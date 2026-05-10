@@ -1,7 +1,20 @@
-import type { ReactNode } from 'react'
+import Sidebar from './Sidebar'
+import Board from './Board'
+import ControlPanel from './ControlPanel'
+import ResultPopup from './ResultPopup'
+import './Layout.css'
 
-function Layout({ children }: { children: ReactNode }) {
-  return <div>{children}</div>
+function Layout() {
+  return (
+    <div className="layout">
+      <Sidebar />
+      <main className="main">
+        <ControlPanel />
+        <Board />
+      </main>
+      <ResultPopup />
+    </div>
+  )
 }
 
 export default Layout

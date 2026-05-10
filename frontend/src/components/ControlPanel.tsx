@@ -1,4 +1,5 @@
 import { useGame, useActiveSession } from '../context/GameContext'
+import './ControlPanel.css'
 
 function ControlPanel() {
   const { dispatch } = useGame()
@@ -6,17 +7,26 @@ function ControlPanel() {
 
   return (
     <div className="control-panel">
-      <button onClick={() => dispatch({ type: 'CREATE_SESSION' })}>
+      <button
+        className="cp-button cp-primary"
+        onClick={() => dispatch({ type: 'CREATE_SESSION' })}
+      >
         New Game
       </button>
 
       {session && (
         <>
-          <span>Turn: {session.currentTurn}</span>
-          <button onClick={() => dispatch({ type: 'RESET_SESSION' })}>
+          <span className="cp-turn">
+            Turn: <strong>{session.currentTurn}</strong>
+          </span>
+          <button
+            className="cp-button"
+            onClick={() => dispatch({ type: 'RESET_SESSION' })}
+          >
             Reset
           </button>
           <button
+            className="cp-button cp-danger"
             onClick={() =>
               dispatch({ type: 'DELETE_SESSION', id: session.id })
             }
